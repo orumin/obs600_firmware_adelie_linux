@@ -1,0 +1,12 @@
+# Set to the list of devices you want to spawn a getty on if the device exists
+
+GETTYS="ttyS0 ttyS1 tty1 tty2 tty3 tty4 tty5 tty6"
+
+
+# For every tty defined here, fill agetty options and baud rate if applicable
+
+GETTYS_ttyS0_OPTIONS="-8 -L"
+GETTYS_ttyS0_BAUDRATE="115200"
+
+GETTYS_ttyS1_OPTIONS="-8 -L"
+GETTYS_ttyS1_BAUDRATE="115200"

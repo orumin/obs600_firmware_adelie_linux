@@ -1,0 +1,6 @@
+initrd
+initrd.lzma
+obs600.dtb
+vmlinux.bin.gz
+uImage.initrd.obs600
+*.txz

@@ -1,0 +1,32 @@
+#!/bin/sh -e
+
+tty=tty2
+baud=115200
+options='-L'
+
+if test -e /run/kernel_env/earlygetty && \
+	line=`head -n 1 /run/kernel_env/earlygetty` ; then
+  tty="${line%%,*}"
+  bpnf="${line##*,}"
+  nf=
+  f=
+  clean=false
+  case "$bpnf" in
+    *n*) baud=${bpnf%%n*} ; nf="${bpnf##*n}" ; clean=true ;;
+    *o*) baud=${bpnf%%o*} ; nf="${bpnf##*o}" ;;
+    *e*) baud=${bpnf%%e*} ; nf="${bpnf##*e}" ;;
+    [[:digit:]]*) baud=$bpnf
+  esac
+  case "$nf" in
+    7*) clean=false ; f="${nf#7}" ;;
+    [[:digit:]]*) clean=true ; f="${nf#?}"
+  esac
+  if $clean ; then
+    options="$options -8"
+  fi
+  if test "$f" = 'r' ; then
+    options="$options -h"
+  fi
+fi
+
+exec /sbin/agetty $options -- "$tty" $baud
