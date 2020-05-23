@@ -4,6 +4,9 @@ MKFS := mkfs.ext4
 LZMA := /usr/bin/lzma
 MKIMAGE := /usr/bin/mkimage
 
+#KERN_VER := 5.4.5
+KERN_VER := 4.19.63
+
 IMAGE_ROOT := $(abspath ./image_root)
 DISTS_DIR := $(abspath ./dists)
 DIST_FILES_DIR := $(DISTS_DIR)/files
@@ -19,7 +22,7 @@ ADELIE_LINUX_TARBALL := adelie-rootfs-ppc-1.0-rc1-20200206.txz
 TARBALL_URL := $(ADELIE_LINUX_URL)/$(ADELIE_LINUX_TARBALL)
 TARBALL_PATH := $(DISTS_DIR)/$(ADELIE_LINUX_TARBALL)
 
-CONFIG_FILE := $(DISTS_DIR)/config-5.4.5-obs600
+CONFIG_FILE := $(DISTS_DIR)/config-$(KERN_VER)-obs600
 
 KERNEL := $(BUILD_DIR)/vmlinux.bin.gz
 INITRD_NAME := initrd
@@ -50,7 +53,11 @@ $(KERNEL):
 
 $(DTB): $(KERNEL)
 	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KERNEL_SOURCE_DIR) obs600.dtb
+ifeq ($(KERN_VER), 4.19.63)
+	cp $(KERNEL_SOURCE_DIR)/arch/powerpc/boot/obs600.dtb $(BUILD_DIR)/
+else
 	cp $(KERNEL_SOURCE_DIR)/arch/powerpc/boot/dts/obs600.dtb $(BUILD_DIR)/
+endif
 
 $(TARBALL_PATH):
 	curl -L $(TARBALL_URL) -o $@
