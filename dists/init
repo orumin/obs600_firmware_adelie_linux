@@ -1,0 +1,21 @@
+#!/bin/sh
+
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+export PATH
+
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t devtmpfs none /dev
+
+sleep 5
+
+rootdev=`findfs LABEL=/ 2> /dev/null`
+
+if [ "$rootdev" != "" ]; then
+    mkdir -p /new_root
+    mount -o ro $rootdev /new_root
+    cd /new_root
+    exec switch_root . /sbin/init
+fi
+
+exec /bin/ash
