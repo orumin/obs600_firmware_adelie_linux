@@ -13,7 +13,19 @@ fi
 
 tar --numeric-owner -xpvJf ${TARBALL_PATH} -C ${IMAGE_ROOT}
 
-cp -a ${DISTS}/* ${IMAGE_ROOT}/
+install -m 644 -o root -g root ${DISTS}/etc/apk/world ${IMAGE_ROOT}/etc/apk
+install -m 644 -o root -g root ${DISTS}/etc/conf.d/{gettys,hostname,net} ${IMAGE_ROOT}/etc/conf.d
+install -m 644 -o root -g root ${DISTS}/etc/default/openblocks ${IMAGE_ROOT}/etc/default
+install -m 644 -o root -g root ${DISTS}/etc/{fstab,hostname,hosts} ${IMAGE_ROOT}/etc
+install -m 640 -o root -g root ${DISTS}/etc/shadow ${IMAGE_ROOT}/etc
+install -m 755 -o root -g root ${DISTS}/etc/init.d/{openblocks-setup,pshd,runled,umountfs} ${IMAGE_ROOT}/etc/init.d
+install -m 755 -o root -g root ${DISTS}/etc/ssh/sshd_config ${IMAGE_ROOT}/etc/ssh
+install -m 755 -o root -g root ${DISTS}/etc/s6-linux-init/current/run-image/service/s6-linux-init-early-getty/run \
+    ${IMAGE_ROOT}/etc/s6-linux-init/current/run-image/service/s6-linux
+
+install -m 644 -o root -g root ${DISTS}/lib/apk/db/installed ${IMAGE_ROOT}/lib/apk/db
+
+install -m 755 -o root -g root ${DISTS}/usr/sbin/flashcfg ${IMAGE_ROOT}/usr/sbin
 
 cd ${IMAGE_ROOT}/dev && \
     mknod -m 640 mem c 1 1 && \
