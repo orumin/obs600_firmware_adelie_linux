@@ -95,9 +95,9 @@ dist-clean:
 
 clean-kernel:
 	make ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KERNEL_SOURCE_DIR) clean
-	$(RM) -rf $(KERNEL)
+	$(RM) -rf $(KERNEL) $(DTB)
 
 clean-initrd:
-	$(RM) -rf $(INITRD)
+	$(RM) -rf $(INITRD) $(INITRD_COMP)
 
 clean-all: clean dist-clean clean-kernel clean-initrd
